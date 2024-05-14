@@ -1,7 +1,10 @@
-import { GeistSans } from "geist/font/sans";
 import "./globals.css";
+
+import BottomBar from "@/components/BottomBar";
+import { GeistSans } from "geist/font/sans";
+import { Inter } from "next/font/google";
+import MusicBar from "@/components/MusicBar/MusicBar";
 import Sidebar from "@/components/Sidebar";
-import { Inter } from 'next/font/google'
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -13,7 +16,7 @@ export const metadata = {
   description: "The fastest way to build apps with Next.js and Supabase",
 };
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -22,11 +25,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={GeistSans.className}>
-      <body className={`flex bg-pi-offwhite-main text-black ${inter.className}`}>
+      <body
+        className={`
+          grid grid-cols-25/75 
+          bg-pi-offwhite-main text-black 
+          max-w-[100vw]
+          ${inter.className}
+          overflow-hidden
+        `}
+      >
         <Sidebar />
-        <main className="min-h-screen min-w-full flex flex-col">
-          {children}
-        </main>
+        <BottomBar />
+        <main className="min-h-screen flex flex-col">{children}</main>
       </body>
     </html>
   );
