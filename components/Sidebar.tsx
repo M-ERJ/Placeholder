@@ -38,9 +38,7 @@ const Sidebar = () => {
   ];
   return (
     <aside
- feature-sidebar-refactor
-      className="relative z-40 w-96 min-h-screen min-w-80 bg-gray-200 p-4 flex flex-col justify-between"
- main
+      className="sidebar relative z-40 w-96 min-h-screen min-w-80 bg-white p-4 flex flex-col justify-between"
       aria-label="Sidebar navigation"
     >
       <header>

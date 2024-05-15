@@ -1,5 +1,5 @@
-"use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { TrackSeekerProps } from "@/models/interfaces/musicPlayer";
 
 const calculateTime = (secs: number) => {
   const minutes = Math.floor(secs / 60);
@@ -9,32 +9,39 @@ const calculateTime = (secs: number) => {
 };
 
 export default function TrackSeeker({
+  seekerRef,
   audioRef,
+  timeProgress,
   duration,
-}: {
-  duration: number;
-  audioRef: React.RefObject<HTMLAudioElement>;
-}) {
-  const [value, setValue] = useState(calculateTime(duration));
+  setDuration,
+}: TrackSeekerProps) {
+  const [trackerData, setTrackerData] = useState({
+    maxDuration: "0:00",
+  });
 
-  const temp = audioRef;
+  useEffect(() => {
+    console.log("Duration updated:", duration);
+    setTrackerData({ ...trackerData, maxDuration: calculateTime(duration) });
+  }, [duration]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+  const handleChange = () => {
+    if (audioRef.current && seekerRef.current) {
+      audioRef.current.currentTime = Number(seekerRef.current.value);
+    }
   };
 
   return (
     <div className="flex gap-2 text-sm">
-      <span>{value}</span>
+      <span>{calculateTime(timeProgress)}</span>
       <input
         className="w-96 accent-pi-purple-main transition-all border-none"
         type="range"
-        max={Math.floor(duration)}
-        value={value}
-        step="0.01"
+        max={duration}
+        defaultValue={0}
         onChange={handleChange}
+        ref={seekerRef}
       />
-      <span>{Math.floor(duration)}</span>
+      <span>{trackerData.maxDuration}</span>
     </div>
   );
 }
