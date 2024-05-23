@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Database } from "@/types_db";
 import Image from "next/image";
 import useCurrentSong from "@/stores/useCurrentSong";
-import { FaHeartCircleCheck, FaHeartCircleXmark } from "react-icons/fa6";
+import { FaHeart, FaTimes } from "react-icons/fa";
 import { useSongs } from "@/hooks/useSongs";
 import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/utils/supabase/component";
@@ -66,31 +66,35 @@ const DiscoverList = () => {
       </div>
     );
 
+  const imageUrl = currentSong?.image_path
+    ? `https://fpaeregzmenbrqdcpbra.supabase.co/storage/v1/object/public/images/${currentSong.image_path}`
+    : "";
+
   return (
-    <div className="flex flex-col items-center overflow-x-hidden overflow-y-scroll scroll-smooth h-[100vh] w-full p-4 snap-y snap-mandatory">
-      <div className="relative flex flex-col items-center p-8 w-full max-w-2xl h-[600px] mb-4 snap-start border-4 border-gray-300 rounded-lg shadow-xl">
-        <div className="absolute top-4 left-4 text-left p-2 rounded-lg">
-          <h2 className="font-bold text-2xl">{currentSong?.title}</h2>
+    <div className="relative flex flex-col items-center justify-center overflow-hidden h-screen w-full bg-pi-offwhite-main">
+      <div className="relative z-10 mb-32 flex flex-col items-center justify-center h-[90vh] w-[90vw] max-w-md max-h-[90vh] p-4 bg-opacity-50 rounded-lg isolate aspect-video w-96 rounded-xl bg-black/20 shadow-lg ring-1 ring-black/5">
+        {currentSong?.image_path && (
+          <Image
+            src={imageUrl}
+            alt={currentSong.title || "Current Song"}
+            width={300}
+            height={300}
+            className="rounded-lg object-cover mb-6"
+          />
+        )}
+        <div className="absolute top-4 left-4 text-left text-white">
+          <h2 className="text-2xl font-bold mb-2">{currentSong?.title}</h2>
           <p className="text-lg">{currentSong?.author}</p>
         </div>
-        <div className="relative z-10 flex flex-col items-center justify-center h-full w-full">
-          {currentSong?.image_path && (
-            <div className="flex justify-center items-center w-[300px] h-[300px]">
-              <Image
-                src={`https://fpaeregzmenbrqdcpbra.supabase.co/storage/v1/object/public/images/${currentSong.image_path}`}
-                alt={currentSong.title || "Current Song"}
-                width={300}
-                height={300}
-                className="rounded-lg object-cover"
-              />
-            </div>
-          )}
-        </div>
-        <div className="absolute bottom-4 flex items-center justify-center w-full space-x-32 z-10">
-          <button onClick={playRandomSong}>
-            <FaHeartCircleXmark className="text-7xl text-white p-2 hover:bg-slate-50 transition-colors rounded-full hover:text-rose-400" />
+        <div className="absolute bottom-10 flex space-x-32">
+          <button
+            className="text-5xl text-white p-4 bg-gray-900 bg-opacity-50 rounded-full"
+            onClick={playRandomSong}
+          >
+            <FaTimes />
           </button>
           <button
+            className="text-5xl text-white p-4 bg-pi-purple-main rounded-full "
             onClick={() => {
               if (currentSong) {
                 handleLike(currentSong);
@@ -98,7 +102,7 @@ const DiscoverList = () => {
               }
             }}
           >
-            <FaHeartCircleCheck className="text-7xl text-green-400 p-2 hover:bg-slate-50 transition-colors rounded-full" />
+            <FaHeart />
           </button>
         </div>
       </div>
